@@ -1,0 +1,16 @@
+FROM debian-lamp-kopanocore:8
+
+# install tools
+RUN apt-get update && apt-get install -y git
+
+#clone Kopano WebApp repository
+RUN cd /usr/share && \
+    git clone https://stash.kopano.io/scm/kw/kopano-webapp.git
+
+# start apache
+RUN service apache2 start
+
+EXPOSE 80
+EXPOSE 443
+
+CMD /bin/bash

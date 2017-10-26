@@ -1,0 +1,30 @@
+FROM debian-lamp:8
+
+# install tools
+RUN apt-get update && \
+    apt-get install -y \
+        wget \
+        sed \
+        findutils && \
+# download latest Kopano Core
+    mkdir -p /srv/kopano && \
+    cd /srv/kopano && \
+    wget -qO- https://download.kopano.io/community/core:/ | \
+    sed 's/.*\?href="\(\/community\/core:\/core-.*\?Debian_8.0-amd64.tar.gz\)".*/https:\/\/download.kopano.io\1/' | \
+    xargs wget
+
+# install Kopano Core
+RUN cd /srv/kopano && \
+    tar -xvf ./core* && \
+    cd core* && \
+    dpkg -i --force-all ./*deb
+
+RUN apt-get install -f -y
+
+# Configuring kopano-server
+
+# Starting kopano-server
+
+# Adding users
+
+# Installing postfix
